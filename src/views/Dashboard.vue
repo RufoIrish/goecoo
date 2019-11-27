@@ -2,7 +2,7 @@
   <div>
     <Sidebar/>
     <!-- <CardsOfEvents/> -->
-    <table v-for="(event, index) in events" :key="index" v-bind:update="false" v-show="dashboard"  @click.prevent="dashboardFinal">
+    <table v-for="(event, index) in events" :key="index" v-bind:update="false" v-show="!update">
       <tbody id="tbody" style="margin-left : 20%">
         <tr style="margin-top:2%">
           <h4>{{event.dateCreated}}</h4>
@@ -31,14 +31,14 @@
             >
               <v-icon dark>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn @click="goingDelete(event._id,event.title)" @click.prevent="del = true" class="mx-2" fab dark large color="red">
+            <v-btn @click="deleteEvent(event._id)" class="mx-2" fab dark large color="red">
               <v-icon dark>mdi-delete</v-icon>
             </v-btn>
           </div>
         </tr>
       </tbody>
     </table>
-    <div v-show="update"  @click.prevent="updateFinal">
+    <div v-show="update">
       <table>
         <v-card ref="form">
           <template>
@@ -46,6 +46,7 @@
               <Imageupload/>
             </v-card>
           </template>
+          <h1 class="text-center">Create an Event</h1>
 
           <v-card-text>
             <v-text-field
@@ -77,13 +78,13 @@
               </template>
               <v-date-picker v-model="date" no-title scrollable>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary">Cancel</v-btn>
+                <v-btn text color="primary" @click="this.$router.push('/Dashboard')">Cancel</v-btn>
                 <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
               </v-date-picker>
             </v-menu>
             <v-textarea
               name="input-7-1"
-              filledppppsdffsd
+              filled
               placeholder="Description of the event"
               prepend-icon="fas fa-file-alt"
               label="Description"
@@ -100,8 +101,9 @@
             ></v-text-field>
           </v-card-text>
           <v-divider class="mt-12"></v-divider>
+
           <v-card-actions>
-            <v-btn text @click.prevent="update = false">Cancel</v-btn>
+            <v-btn text>Cancel</v-btn>
             <v-spacer></v-spacer>
             <v-slide-x-reverse-transition>
             </v-slide-x-reverse-transition>
@@ -110,36 +112,10 @@
         </v-card>
       </table>
     </div>
-
-  <div v-show="del"  @click.prevent="deleteFinal">
-      <v-card
-    class="mx-auto"
-    max-width="344"
-    outlined
-  >
-    <v-list-item three-line>
-      <v-list-item-content>
-        <div class="overline mb-4">OVERLINE</div>
-        <v-list-item-title v-model="titleDelete" class="headline mb-1">{{titleDelete}}</v-list-item-title>
-        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
-      </v-list-item-content>
-
-      <v-list-item-avatar
-        tile
-        size="80"
-        color="grey"
-      ></v-list-item-avatar>
-    </v-list-item>
-
-    <v-card-actions>
-      <v-btn text color="primary" @click="$router.push('dashboard')">Cancel</v-btn>
-      <v-btn text color="danger"  @click = "deleteEvent" >Delete</v-btn>
-    </v-card-actions>
-  </v-card>
-  </div>
-
   </div>
 </template>
+
+
 <script>
 import axios from "axios";
 import Sidebar from "../components/Sidebar.vue";
@@ -153,17 +129,13 @@ export default {
   data() {
     return {
       events: [],
-      del: false,
       update: false,
-      dashboard: false,
       title: "",
       description: "",
       date: "",
       address: "",
       menu:'',
-      id:'',
-      idDelete:'',
-      titleDelete:''
+      id:''
     };
   },
   mounted() {
@@ -172,16 +144,10 @@ export default {
     });
   },
   methods: {
-  goingDelete(id,title){
-    this.delete= true;
-    this.idDelete = id;
-    this.titleDelete = title
-  },
-    deleteEvent() {
-      axios.delete("http://localhost:3000/event/delete" + this.idDelete).then(res => {
+    deleteEvent(id) {
+      axios.delete("http://localhost:3000/event/delete" + id).then(res => {
         axios.get("http://localhost:3000/event/retrieveAll").then(res => {
           this.events = res.data;
-          this.delete = false;
         });
       });
     },
@@ -207,22 +173,7 @@ export default {
           axios.get("http://localhost:3000/event/retrieveAll").then(res => {
             this.events = res.data;
           });
-        }); 
-    },
-    updateFinal(){
-      this.update = true,
-      this.del = false,
-      this.dashboard = false
-    },
-    deleteFinal(){
-      this.del = true,
-      this.update = false,
-      this.dashboard = false,
-    },
-    dashboardFinal(){
-      this.del = false,
-      this.update = false,
-      this.dashboard = true,     
+        });
     }
   }
 };
