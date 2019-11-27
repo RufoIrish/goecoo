@@ -173,7 +173,6 @@ import Imageupload from "../components/imageupload.vue"
         })
       },
       submit () {
-        alert(this.title + this. address + this.description + this.date)
         if(this.title && this.address && this.date && this.description != null){
             alert('not null')
             var data = {
@@ -182,11 +181,9 @@ import Imageupload from "../components/imageupload.vue"
               description : this.description,
               address : this.address
             }
-            console.log(data)
         axios
           .post('http://localhost:3000/event/create', {data})
           .then(res =>{
-            alert('nice one')
             this.$router.push('/dashboard')
           })
           .catch(err =>{

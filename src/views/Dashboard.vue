@@ -78,7 +78,7 @@
               </template>
               <v-date-picker v-model="date" no-title scrollable>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="this.$router.push('/Dashboard')">Cancel</v-btn>
                 <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
               </v-date-picker>
             </v-menu>
@@ -91,7 +91,6 @@
               v-model="description"
               auto-grow
             ></v-textarea>
-
             <v-file-input label="File input" filled prepend-icon="fas fa-camera-retro"></v-file-input>
             <v-text-field
               v-model="address"
@@ -107,16 +106,8 @@
             <v-btn text>Cancel</v-btn>
             <v-spacer></v-spacer>
             <v-slide-x-reverse-transition>
-              <v-tooltip v-if="formHasErrors" left>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon class="my-0" @click="resetForm" v-on="on">
-                    <v-icon>mdi-refresh</v-icon>
-                  </v-btn>
-                </template>
-                <span>Refresh form</span>
-              </v-tooltip>
             </v-slide-x-reverse-transition>
-            <v-btn @click.prevent="update = false" color="primary" text @click="submit">Update</v-btn>
+            <v-btn @click.prevent="update = false" color="primary" @click="submit" text >Update</v-btn>
           </v-card-actions>
         </v-card>
       </table>
@@ -142,7 +133,9 @@ export default {
       title: "",
       description: "",
       date: "",
-      address: ""
+      address: "",
+      menu:'',
+      id:''
     };
   },
   mounted() {
@@ -152,7 +145,6 @@ export default {
   },
   methods: {
     deleteEvent(id) {
-      alert(id);
       axios.delete("http://localhost:3000/event/delete" + id).then(res => {
         axios.get("http://localhost:3000/event/retrieveAll").then(res => {
           this.events = res.data;
@@ -160,18 +152,23 @@ export default {
       });
     },
     editEvent(id, title, dateEvent, description, address) {
+    (this.id = id),
       (this.title = title),
         (this.date = dateEvent),
         (this.description = description),
         (this.address = address);
+
+    },
+    submit(){
       var data = {
         title: this.title,
         dateEvent: this.date,
         description: this.description,
         address: this.address
       };
+      console.log(data)
       axios
-        .put("http://localhost:3000/event/update" + id, { data })
+        .put("http://localhost:3000/event/update" + this.id, { data })
         .then(res => {
           axios.get("http://localhost:3000/event/retrieveAll").then(res => {
             this.events = res.data;

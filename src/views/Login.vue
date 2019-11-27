@@ -100,7 +100,6 @@ export default {
       .then(data =>{
         alert(data)
         this.$emit('Login',data.data);
-
       })
       .catch(err=> alert(err));
 
