@@ -2,7 +2,7 @@
   <div>
     <Sidebar/>
     <!-- <CardsOfEvents/> -->
-    <table v-for="(event, index) in events" :key="index" v-bind:update="false" v-show="!update">
+    <table v-for="(event, index) in events" :key="index" v-bind:update="false" v-show="dashboard"  @click.prevent="dashboardFinal">
       <tbody id="tbody" style="margin-left : 20%">
         <tr style="margin-top:2%">
           <h4>{{event.dateCreated}}</h4>
@@ -31,14 +31,14 @@
             >
               <v-icon dark>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn @click="goingDelete(event._id)" class="mx-2" fab dark large color="red">
+            <v-btn @click="goingDelete(event._id,event.title)" @click.prevent="del = true" class="mx-2" fab dark large color="red">
               <v-icon dark>mdi-delete</v-icon>
             </v-btn>
           </div>
         </tr>
       </tbody>
     </table>
-    <div v-show="update">
+    <div v-show="update"  @click.prevent="updateFinal">
       <table>
         <v-card ref="form">
           <template>
@@ -110,6 +110,34 @@
         </v-card>
       </table>
     </div>
+
+  <div v-show="del"  @click.prevent="deleteFinal">
+      <v-card
+    class="mx-auto"
+    max-width="344"
+    outlined
+  >
+    <v-list-item three-line>
+      <v-list-item-content>
+        <div class="overline mb-4">OVERLINE</div>
+        <v-list-item-title v-model="titleDelete" class="headline mb-1">{{titleDelete}}</v-list-item-title>
+        <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>
+      </v-list-item-content>
+
+      <v-list-item-avatar
+        tile
+        size="80"
+        color="grey"
+      ></v-list-item-avatar>
+    </v-list-item>
+
+    <v-card-actions>
+      <v-btn text color="primary" @click="$router.push('dashboard')">Cancel</v-btn>
+      <v-btn text color="danger"  @click = "deleteEvent" >Delete</v-btn>
+    </v-card-actions>
+  </v-card>
+  </div>
+
   </div>
 </template>
 <script>
@@ -125,15 +153,17 @@ export default {
   data() {
     return {
       events: [],
-      delete: false,
+      del: false,
       update: false,
+      dashboard: false,
       title: "",
       description: "",
       date: "",
       address: "",
       menu:'',
       id:'',
-      idDelete:''
+      idDelete:'',
+      titleDelete:''
     };
   },
   mounted() {
@@ -142,13 +172,16 @@ export default {
     });
   },
   methods: {
-  goingDelete(id){
+  goingDelete(id,title){
+    this.delete= true;
     this.idDelete = id;
+    this.titleDelete = title
   },
     deleteEvent() {
       axios.delete("http://localhost:3000/event/delete" + this.idDelete).then(res => {
         axios.get("http://localhost:3000/event/retrieveAll").then(res => {
           this.events = res.data;
+          this.delete = false;
         });
       });
     },
@@ -174,7 +207,22 @@ export default {
           axios.get("http://localhost:3000/event/retrieveAll").then(res => {
             this.events = res.data;
           });
-        });
+        }); 
+    },
+    updateFinal(){
+      this.update = true,
+      this.del = false,
+      this.dashboard = false
+    },
+    deleteFinal(){
+      this.del = true,
+      this.update = false,
+      this.dashboard = false,
+    },
+    dashboardFinal(){
+      this.del = false,
+      this.update = false,
+      this.dashboard = true,     
     }
   }
 };
