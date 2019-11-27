@@ -17,17 +17,14 @@
             <v-text-field
               v-model="user.password"
               :append-icon="show1 ? 'fas fa-eye' : 'fas fa-eye-slash'"
-              :rules="[rules.required, rules.password]"
               :type="show1 ? 'text' : 'password'"
               name="input-10-1"
             
               label="Password"
-              
-              hint="At least 8 characters"
               counter
               @click:append="show1 = !show1"
             ></v-text-field>
-            <v-btn class="mr-4" @click="checkform" :disabled="!validinput"  color="green">submit</v-btn>
+            <v-btn class="mr-4"   @click="login" color="green">submit</v-btn>
             <v-btn @click="clear">clear</v-btn>
           </v-container>
         </form>
@@ -66,7 +63,7 @@ h1, h2 {
 }
 </style>
 <script>
-import {Login} from '../store/axios.js'
+import axios from "axios"
 export default {
   data() {
     return {
@@ -91,26 +88,20 @@ export default {
     };
   },
   methods: {
-    checkform: function() {
-      let data={
-       username: this.user.username,
-       password:this.user.password
+      login(){
+          axios.post('http://localhost:3000/admin/login',{data:{username : this.user.username,
+           password : this.user.password}})
+          .then(res =>{
+            alert(res.data)
+            if(res.data == 'proceed'){
+            this.$router.push('/dashboard')
+            }
+          })
+          .catch(err =>{
+            alert('error')
+          })
       }
-      Login(data)
-      .then(data =>{
-        alert(data)
-        this.$emit('Login',data.data);
-      })
-      .catch(err=> alert(err));
-
-      if (data.username !== null && data.password !== null) {
-        // sessionStorage.setItem("authenticated", true);
-        // sessionStorage.setItem("username", this.username);
-        // this.$store.commit("setAuthentication", true);
-        // this.$router.push("/home");
-      }
-      // e.preventDefault();
-    },
+    ,
     clear() {
       this.$v.$reset();
       this.username = "";

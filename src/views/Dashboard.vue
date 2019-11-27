@@ -31,7 +31,7 @@
             >
               <v-icon dark>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn @click="deleteEvent(event._id)" class="mx-2" fab dark large color="red">
+            <v-btn @click="goingDelete(event._id)" class="mx-2" fab dark large color="red">
               <v-icon dark>mdi-delete</v-icon>
             </v-btn>
           </div>
@@ -46,7 +46,6 @@
               <Imageupload/>
             </v-card>
           </template>
-          <h1 class="text-center">Create an Event</h1>
 
           <v-card-text>
             <v-text-field
@@ -78,13 +77,13 @@
               </template>
               <v-date-picker v-model="date" no-title scrollable>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="this.$router.push('/Dashboard')">Cancel</v-btn>
+                <v-btn text color="primary">Cancel</v-btn>
                 <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
               </v-date-picker>
             </v-menu>
             <v-textarea
               name="input-7-1"
-              filled
+              filledppppsdffsd
               placeholder="Description of the event"
               prepend-icon="fas fa-file-alt"
               label="Description"
@@ -101,9 +100,8 @@
             ></v-text-field>
           </v-card-text>
           <v-divider class="mt-12"></v-divider>
-
           <v-card-actions>
-            <v-btn text>Cancel</v-btn>
+            <v-btn text @click.prevent="update = false">Cancel</v-btn>
             <v-spacer></v-spacer>
             <v-slide-x-reverse-transition>
             </v-slide-x-reverse-transition>
@@ -114,8 +112,6 @@
     </div>
   </div>
 </template>
-
-
 <script>
 import axios from "axios";
 import Sidebar from "../components/Sidebar.vue";
@@ -129,13 +125,15 @@ export default {
   data() {
     return {
       events: [],
+      delete: false,
       update: false,
       title: "",
       description: "",
       date: "",
       address: "",
       menu:'',
-      id:''
+      id:'',
+      idDelete:''
     };
   },
   mounted() {
@@ -144,8 +142,11 @@ export default {
     });
   },
   methods: {
-    deleteEvent(id) {
-      axios.delete("http://localhost:3000/event/delete" + id).then(res => {
+  goingDelete(id){
+    this.idDelete = id;
+  },
+    deleteEvent() {
+      axios.delete("http://localhost:3000/event/delete" + this.idDelete).then(res => {
         axios.get("http://localhost:3000/event/retrieveAll").then(res => {
           this.events = res.data;
         });

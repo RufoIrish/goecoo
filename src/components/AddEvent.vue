@@ -7,6 +7,7 @@
 <script>
 import sidebar from "../components/Sidebar.vue";
 import InputEvent from "../components/InputEvent.vue";
+
 export default {
   name:"AddEvent",
   data: () => ({

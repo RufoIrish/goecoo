@@ -14,7 +14,6 @@
        
         <v-card-text>
           <v-text-field
-              ref="name"
               v-model="title"
               prepend-icon="fas fa-file"
               label="Title"
@@ -62,7 +61,6 @@
           prepend-icon="fas fa-camera-retro"
         ></v-file-input>
         <v-text-field
-              ref="name"
               v-model="address"
               prepend-icon="fas fa-map-marker-alt"
               label="Venue"
@@ -76,7 +74,7 @@
 
         
         <v-card-actions>
-          <v-btn text>Cancel</v-btn>
+          <v-btn text  @click= "$router.push('/dashboard')" >Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>
             <v-tooltip
@@ -118,7 +116,6 @@ import Imageupload from "../components/imageupload.vue"
       menu: false,
       modal: false,
       menu2: false,
-      name: null,
       title: null,
       address: null,
       description : null,
@@ -174,7 +171,6 @@ import Imageupload from "../components/imageupload.vue"
       },
       submit () {
         if(this.title && this.address && this.date && this.description != null){
-            alert('not null')
             var data = {
               title : this.title,
               dateevent : this.date,
@@ -187,7 +183,7 @@ import Imageupload from "../components/imageupload.vue"
             this.$router.push('/dashboard')
           })
           .catch(err =>{
-            alert('error!')
+            console.log(err)
           })
         }else{
           alert("fill all the given fields")
