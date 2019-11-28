@@ -41,7 +41,7 @@
             </template>
             <v-date-picker v-model="date" no-title scrollable>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+              <v-btn text color="primary" @click="this.$router.push('/dashboard')">Cancel</v-btn>
               <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
             </v-date-picker>
           </v-menu>
@@ -101,10 +101,6 @@
   </v-row>
 
 </template>
-
-<style>
-
-</style>
 
 <script>
 import axios from 'axios'
@@ -171,6 +167,7 @@ import Imageupload from "../components/imageupload.vue"
       },
       submit () {
         if(this.title && this.address && this.date && this.description != null){
+
             var data = {
               title : this.title,
               dateevent : this.date,

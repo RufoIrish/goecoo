@@ -16,7 +16,7 @@
             <h4>Posted by : {{event.createdBy}}</h4>
           </div>
           <hr>
-          <h5>{{event.description}}</h5>
+          <h5 id = "describeForm">{{event.description}}</h5>
           <hr>
           <hr>
           <div id="buttons">
@@ -46,7 +46,6 @@
               <Imageupload/>
             </v-card>
           </template>
-          <h1 class="text-center">Create an Event</h1>
 
           <v-card-text>
             <v-text-field
@@ -78,9 +77,9 @@
               </template>
               <v-date-picker v-model="date" no-title scrollable>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="this.$router.push('/Dashboard')">Cancel</v-btn>
+                <v-btn text color="primary">Cancel</v-btn>
                 <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-              </v-date-picker>
+              </v-date-picker>  
             </v-menu>
             <v-textarea
               name="input-7-1"
@@ -103,11 +102,11 @@
           <v-divider class="mt-12"></v-divider>
 
           <v-card-actions>
-            <v-btn text>Cancel</v-btn>
+            <v-btn text  @click="update=false">Cancel</v-btn>
             <v-spacer></v-spacer>
             <v-slide-x-reverse-transition>
             </v-slide-x-reverse-transition>
-            <v-btn @click.prevent="update = false" color="primary" @click="submit" text >Update</v-btn>
+            <v-btn  color="primary" @click="submit" text >Update</v-btn>
           </v-card-actions>
         </v-card>
       </table>
@@ -157,9 +156,9 @@ export default {
         (this.date = dateEvent),
         (this.description = description),
         (this.address = address);
-
     },
     submit(){
+      this.update = false;
       var data = {
         title: this.title,
         dateEvent: this.date,
@@ -182,20 +181,26 @@ export default {
 table {
   padding: 15px;
   /* margin-right: 15%; */
-  margin-left: 15%;
-  width: 70%;
+  margin-left: 25%;
+  width: 50%;
   /* border-style: groove; */
   margin-top: 1%;
   background-color: white;
   border-radius: 3px;
-}
-table #tbody {
-  border-style: groove;
 }
 #title {
   text-align: center;
 }
 #buttons {
   text-align: right;
+  margin-top: 1%
+}
+#describeForm{
+  margin-right: 5%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  text-align: justify;
+  font-family: 'Lucida Sans';
+  padding: 5px;
 }
 </style>

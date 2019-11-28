@@ -46,7 +46,10 @@ h1, h2 {
     flex: 1 1 auto;
     max-width: 100%;
     position: relative;
-    background-image: url('../assets/greengrass.jpeg');
+    /* background-image: url('../assets/greengrass.jpeg'); */
+    /* background-color: #bae388;
+     */
+     background-image: linear-gradient(to right top, #113a78, #006eaf, #00a0b1, #00cc7b, #a8eb12);
     background-size:cover
 }
 .v-application .text-center {

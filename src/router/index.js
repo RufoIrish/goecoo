@@ -5,6 +5,7 @@ import Login from "../views/Login.vue"
 // import Sidebar from "../components/Sidebar.vue";
 import Dashboard from "../views/Dashboard.vue";
 import AddEvent from "../components/AddEvent.vue";
+import FileUpload from "../components/fileUpload.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -27,24 +28,33 @@ const routes = [
   //   }
   // },
   {
-    path:"/dashboard",
-    name:"dashboard",
-    component:Dashboard ,
+    path: "/dashboard",
+    name: "dashboard",
+    component: Dashboard,
     meta: {
-        tokenRequired: false
+      tokenRequired: false
     }
   },
   {
-    path:"/addevent",
-    name:"addevent",
-    component:AddEvent,
+    path: "/addevent",
+    name: "addevent",
+    component: AddEvent,
     meta: {
-        tokenRequired: false
+      tokenRequired: false
     }
   },
+  {
+  path: "/fileUpload",
+  name: "fileUpload",
+  component: FileUpload,
+  meta: {
+    tokenRequired: false
+  }
+},
+
   // {
   //   path:"/imageupload",
-  //   name:"imageupload",
+  //   name:"imageuplosad",
   //   component:imageupload,
   //   meta: {
   //       tokenRequired: false
@@ -58,7 +68,8 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue")
-  }
+  },
+
 ];
 
 const router = new VueRouter({
