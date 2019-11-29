@@ -40,11 +40,11 @@ export default {
 
 
     //   console.log(formData + (" formdata"))
-      axios.post('http://localhost:5000/uploadMultiple',
+      axios.post('http://localhost:3000/upload',
         formData
       ).then(res => {
-        console.log(res);
-        alert(res)
+        console.log(res.data);
+        alert(res.data)
       })
         .catch(error => {
           console.error("file upload failed", error);
